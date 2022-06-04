@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
@@ -23,11 +25,17 @@ public class User {
     // 길이 제한 20, 유니크 제약조건
     @Column(length = 20, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String name;
+
     private String website; // 웹 사이트
     private String bio; // 자기소개
+
+    @Column(nullable = false)
     private String email;
     private String phone;
     private String gender;

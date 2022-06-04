@@ -7,8 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -34,7 +40,18 @@ public class AuthController {
     // CSRF 토큰이 있는 상태로 요청을 해야 스프링 시큐리티는 정상 요청이라는 것을 확인한다.
     // -> SecurityConfig 에서 csrf 를 비활성화 하면 딘다. ( csrf 토큰을 심어주는 로직은 직접 짜야한다. )
     @PostMapping("/auth/signup")
-    public String signup(SignupDto signupDto) {
+    public String signup(@Valid SignupDto signupDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            // getFieldErrors() 에 에러들이 차곡 차곡 쌓여있다.
+            for (FieldError error: bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+                //log.info("defaultMessage = {}", error.getDefaultMessage());
+            }
+        }
+
         User user = signupDto.toEntity();
         authService.signup(user);
         return "auth/signin";

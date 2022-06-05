@@ -31,12 +31,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable(); // csrf 비활성화
 
         http.authorizeRequests()
-                .antMatchers("/", "/user/**", "/image/**", "/subscribe/**", "/comment/**")
+                .antMatchers("/", "/user/**", "/image/**", "/subscribe/**", "/comment/**", "api/**")
                 .authenticated() // 위 요청들은 인증(로그인)이 필요함.
                 .anyRequest().permitAll() // 나머지 요창들은 인증(로그인)이 필요 없음.
                 .and()
                 .formLogin()
-                .loginPage("/auth/signin") // 인증이 필요한 곳을 요청하면 자동으로 이동시킬 로그인 경로를 지정함.
+                .loginPage("/auth/signin") // 인증이 필요한 곳을 요청하면 자동으로 이동시킬 로그인 경로를 지정함. (GET)
+                .loginProcessingUrl("/auth/signin") // 이곳을 요청하면 시큐리티가 알아서 로그인을 처리함. (POST)
                 .defaultSuccessUrl("/"); // 로그인을 성공하면 이동할 경로 지정
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,7 +21,8 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id @GeneratedValue
-    private Long id;
+    @Column(name = "USER_ID")
+    private int id;
 
     // 길이 제한 20, 유니크 제약조건
     @Column(length = 20, unique = true)

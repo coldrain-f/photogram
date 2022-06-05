@@ -1,6 +1,7 @@
 package com.cos.controllerdemo.web;
 
 import com.cos.controllerdemo.domain.user.User;
+import com.cos.controllerdemo.handler.ex.CustomValidationException;
 import com.cos.controllerdemo.service.AuthService;
 import com.cos.controllerdemo.web.dto.auth.SignupDto;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +46,12 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
 
-            // getFieldErrors() 에 에러들이 차곡 차곡 쌓여있다.
+            // getFieldErrors() 에 에러들이 차곡 차곡 쌓인다.
             for (FieldError error: bindingResult.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
-                //log.info("defaultMessage = {}", error.getDefaultMessage());
             }
+
+            throw new CustomValidationException("유효성 검사 실패함", errorMap);
         }
 
         User user = signupDto.toEntity();

@@ -15,3 +15,15 @@ spring:
       ddl-auto: create
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true # 스프링 부트 2.5 이상은 data.sql 사용하려면 필수
+
+
+  # multipart 타입으로 파일을 받겠다고 활성화
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+
+# 실제 이미지가 저장될 경로 지정
+file:
+  path: C:/workspace/springbootwork/upload/
+#  path: file:///C:/workspace/springbootwork/upload/

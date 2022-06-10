@@ -1,20 +1,32 @@
 package com.cos.controllerdemo.service;
 
 import com.cos.controllerdemo.domain.user.User;
+import com.cos.controllerdemo.handler.ex.CustomException;
 import com.cos.controllerdemo.handler.ex.CustomValidationApiException;
+import com.cos.controllerdemo.handler.ex.CustomValidationException;
 import com.cos.controllerdemo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public User userProfile(int userId) {
+        log.info("userId = {}", userId);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException("해당 프로필 페이지는 없는 페이지입니다."));
+    }
 
     @Transactional
     public User update(int id, User user) {

@@ -1,6 +1,7 @@
 package com.cos.controllerdemo.handler;
 
 import com.cos.controllerdemo.handler.ex.CustomApiException;
+import com.cos.controllerdemo.handler.ex.CustomException;
 import com.cos.controllerdemo.handler.ex.CustomValidationApiException;
 import com.cos.controllerdemo.handler.ex.CustomValidationException;
 import com.cos.controllerdemo.util.Script;
@@ -20,6 +21,9 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(CustomValidationException.class)
     public String validationException(CustomValidationException e) {
+        if (e.getErrorMap() == null) {
+            return Script.back(e.getMessage());
+        }
         return Script.back(e.getErrorMap().toString());
     }
 
@@ -33,5 +37,11 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(CustomApiException.class)
     public CMRespDto<Map<String, String>> apiException(CustomApiException e) {
         return new CMRespDto<>(-1, e.getMessage(), null);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(CustomException.class)
+    public String exception(CustomException e) {
+        return Script.back(e.getMessage());
     }
 }
